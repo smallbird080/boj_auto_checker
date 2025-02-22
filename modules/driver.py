@@ -15,7 +15,7 @@ def make(filename: str, lang: str) -> int | None:
         return 0
     
 
-def run_case(filename : str, num : int, testcase : str, ans : str, time : int, lang : str) -> bool:
+def run_case(filename : str, num : int, testcase : str, ans : str, time : float, lang : str) -> bool:
     print(f"Running case {num}...")
     try:
         result = subprocess.run(

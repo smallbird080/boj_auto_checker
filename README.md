@@ -67,7 +67,7 @@ Problem Number: 11657
 Current Problem Number: 11657
 Title: 타임머신
 Level: Gold 4
-Time Limit: 1 sec
+Time Limit: 1.0 sec
 Memory Limit: 256 MB
 Avg Tries: 3.8227
 Success Count: 11704

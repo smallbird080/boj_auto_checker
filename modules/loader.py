@@ -7,7 +7,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 levels = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Ruby"]
 
 class Problem:
-    def __init__(self, prob_num, title, time_limit : int, mem_limit : str, level : int, avg_tries : float, success_cnt : int, cases: int, testcases : list[str], answers : list[str]):
+    def __init__(self, prob_num, title, time_limit : float, mem_limit : str, level : int, avg_tries : float, success_cnt : int, cases: int, testcases : list[str], answers : list[str]):
         self.prob_num = prob_num
         self.title = title
         self.time_limit = time_limit
@@ -53,7 +53,7 @@ def get_problem(prob_num: int) -> Problem:
     response = session.get(url, headers=headers)
     session.close()
     soup = bs(response.text, 'html.parser')
-    time_limit = int(soup.select_one("#problem-info > tbody > tr > td:nth-child(1)").text.split()[0])
+    time_limit = float(soup.select_one("#problem-info > tbody > tr > td:nth-child(1)").text.split()[0])
     mem_limit = soup.select_one("#problem-info > tbody > tr > td:nth-child(2)").text
     sample_inputs = soup.select('[id^="sample-input-"]')
     sample_input_texts = [element.text.replace("\r","") for element in sample_inputs]
