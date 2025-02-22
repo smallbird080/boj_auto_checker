@@ -35,6 +35,7 @@ git clone https://github.com/smallbird080/boj_auto_checker.git
 $ python3 boj_auto_checker/checker.py
 ```
 
+### Commands
 ```
 >> help
 Commands:
@@ -45,11 +46,14 @@ Commands:
   make, m: Compile the source code
   setl <lang>: Set the main language
   setf <filename>: Set the filename
-  info: Display information
+  info: Display checker information
+  prob: Display problem information
+  showex, ex, se: Show testcases
 ```
 
+### Example
+실행 시 맨 처음 문제 번호를 입력합니다. (ex. 11657)
 ```
->> info
 BOJ Auto Checker
 Version 1.0
 
@@ -58,8 +62,124 @@ Current main language: cpp
 Available Languages: 
  c11, c99, cpp, c-fsan, cpp-fsan, java, python
 
+Problem Number: 11657
+>> prob
+Current Problem Number: 11657
+Title: 타임머신
+Level: Gold 4
+Time Limit: 1 sec
+Memory Limit: 256 MB
+Avg Tries: 3.8227
+Success Count: 11704
+# Cases: 3
+testcase.ac available: True
+```
+
+`make` 또는 `m` 명령어를 통해 컴파일을 수행합니다.
+```
 >> make
 g++ -o ../boj ../boj.cpp -O2 -Wall -lm -static -std=gnu++17
+```
+
+`run` 또는 `r` 명령어를 통해 실행합니다. 자동으로 수집된 예제를 테스트합니다.
+
+옵션: `a` - 모든 예제 (기본값), `b` - BOJ 제공 예제, `t` - testcase.ac 실행
+```
+>> run
+Testing BOJ + testcase.ac
+
+Running case 1...
+Output for case 1:
+4
+3
+Correct!
+--------------------------------------------------
+Running case 2...
+Output for case 2:
+-1
+Correct!
+--------------------------------------------------
+Running case 3...
+Output for case 3:
+3
+-1
+Correct!
+--------------------------------------------------
+Running testcase.ac...
+!! on dev !!
+
+BOJ Results:
+Case 1: Pass
+Case 2: Pass
+Case 3: Pass
+```
+
+실패 예시
+```
+>> run
+Testing BOJ + testcase.ac
+
+Running case 1...
+Output for case 1:
+5
+4
+Miss! Expected:
+4
+3
+--------------------------------------------------
+Running case 2...
+Output for case 2:
+-1
+Correct!
+--------------------------------------------------
+Running case 3...
+Output for case 3:
+4
+0
+Miss! Expected:
+3
+-1
+--------------------------------------------------
+Running testcase.ac...
+!! on dev !!
+
+BOJ Results:
+Case 1: Fail
+Case 2: Pass
+Case 3: Fail
+```
+fsanitize=address 사용 시
+```
+>> setl cpp-fsan
+>> make
+g++ -o ../boj ../boj.cpp -O2 -Wall -lm -std=gnu++17 -fsanitize=address -g
+
+>> r
+Testing BOJ + testcase.ac
+
+Running case 1...
+=================================================================
+==86105==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x603000000058 at pc 0x55e3a81d324e bp 0x7ffffb4b3f40 sp 0x7ffffb4b3f30
+WRITE of size 8 at 0x603000000058 thread T0
+    #0 0x55e3a81d324d in main ../boj.cpp:31
+    #1 0x7f4c0a237d8f in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #2 0x7f4c0a237e3f in __libc_start_main_impl ../csu/libc-start.c:392
+
+<...>
+
+==86105==ABORTING
+
+case 1 testing stopped: error code 1
+Summary:  AddressSanitizer: heap-buffer-overflow ../boj.cpp:31 in main
+--------------------------------------------------
+Running case 2...
+
+<...>
+
+BOJ Results:
+Case 1: Fail
+Case 2: Fail
+Case 3: Fail
 ```
 
 ## Features
@@ -78,11 +198,14 @@ Makefile 수정을 통해 원하는 언어, 컴파일 옵션을 추가할 수 �
 
 command history 기능을 지원합니다.
 
+fsanitize=address 옵션을 사용할 수 있습니다. (C/C++). fsan 전체 결과와 함께 summary를 추출하여 보여줍니다.
+
 ## TODO
 
 * [X] 컴파일
-* [ ] 예제 자동 수집
-* [ ] 실행
-* [ ] 결과 확인
+* [X] 예제 자동 수집
+* [X] 실행
+* [X] 결과 확인
+* [ ] testcase.ac 테스팅 구현
 * [ ] 언어 추가
 * [ ] ...
