@@ -77,12 +77,16 @@ def run_ac(prob_num : int, filename : str, lang : str ,avail : bool) -> bool:
         print("Testcase.ac not available for this problem")
         return None
     print("Running testcase.ac ...")
-    if lang.count("c"):
+    if lang.count("cpp"):
         lang = "cpp"
+    elif lang.count("c"):
+        lang = "c"
     elif lang.count("py"):
         lang = "py"
     code = get_code(filename, lang)
     generator, answer = get_testac_id(prob_num)
+    if lang.count("c"):
+        lang = "cpp"
     url = "https://testcase.ac/api/trpc/runner.stress?batch=1"
     payload = {
         "0": {

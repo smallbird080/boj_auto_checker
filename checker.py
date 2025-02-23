@@ -99,7 +99,7 @@ def parse(prob : Problem):
         print("  !<command>: Run shell command")
         print("  help, h: Show this message")
         print("  exit, quit, q: Exit the program")
-        print("  run, r [a,b,t,g]: Run the program")
+        print("  run, r [a,b,t,g]: Run your code")
         print("  make, m: Compile the source code")
         print("  setl <lang>: Set the main language")
         print("  setf <filename>: Set the filename")
