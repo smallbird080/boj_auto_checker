@@ -9,14 +9,14 @@
 windows에서는 `wsl`을 사용하여 설치하시기 바랍니다.
 
 ```bash
-cd "<your boj source code directory>"
+cd "your boj source code directory"
 git clone https://github.com/smallbird080/boj_auto_checker.git
 ```
 
 아래와 같은 디렉토리 구조가 되어야 합니다.
 
 ```
-<BOJ src dir>
+[BOJ src dir]
 ├── boj_auto_checker
 │   ├── modules
 │   │   ├── ...
