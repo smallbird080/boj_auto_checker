@@ -30,11 +30,12 @@ def run(opt, prob : Problem):
         print("Testing BOJ + testcase.ac\n")
         for i in range(prob.cases):
             result.append(run_case(config["filename"], i+1, prob.testcases[i], prob.answers[i], prob.time_limit, config["mainLanguage"]))
-        run_ac(prob.ac)
         print()
         print("BOJ Results:")
         for i in range(prob.cases):
             print(f"Case {i+1}: {'Pass' if result[i] else 'Fail'}")
+        print()
+        run_ac(prob.prob_num, config["filename"], config["mainLanguage"], prob.ac)
     elif opt == "b":
         print("Testing BOJ\n")
         for i in range(prob.cases):
@@ -45,11 +46,15 @@ def run(opt, prob : Problem):
             print(f"Case {i+1}: {'Pass' if result[i] else 'Fail'}")
     elif opt == "t":
         print("Testing testcase.ac\n")
-        run_ac(prob.ac)
+        run_ac(prob.prob_num, config["filename"], config["mainLanguage"], prob.ac)
+    elif opt == "g":
+        print("Debug mode, Testing BOJ\n")
+        for i in range(prob.cases):
+            run_case(config["filename"], i+1, prob.testcases[i], prob.answers[i], prob.time_limit, config["mainLanguage"], True)
     else:
         print("Invalid option")
-        print("Usage: run [a,b,t]")
-        print("a: Run both BOJ and testcase.ac (default), b: Run only BOJ, t: Run only testcase.ac")
+        print("Usage: run [a,b,t,g]")
+        print("a: Run both BOJ and testcase.ac (default), b: Run only BOJ, t: Run only testcase.ac, g: Debug mode, no grading")
         return None
     return 0
     
@@ -94,7 +99,7 @@ def parse(prob : Problem):
         print("  !<command>: Run shell command")
         print("  help, h: Show this message")
         print("  exit, quit, q: Exit the program")
-        print("  run, r [a,b,t]: Run the program")
+        print("  run, r [a,b,t,g]: Run the program")
         print("  make, m: Compile the source code")
         print("  setl <lang>: Set the main language")
         print("  setf <filename>: Set the filename")
@@ -166,6 +171,9 @@ while (True):
     break
 
 prob = get_problem(problem)
+
+if (prob is None):
+    sys.exit(1)
 
 while (True):
     result = parse(prob)
