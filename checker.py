@@ -94,6 +94,8 @@ def parse(prob : Problem):
             return run("a", prob)
     elif command[0] in ["make", "m"]:
         return make(config["filename"], config["mainLanguage"])
+    elif command[0] == "clean":
+        return make(config["filename"],"clean")
     elif command[0] in ["help", "h"]:
         print("Commands:")
         print("  !<command>: Run shell command")
@@ -101,6 +103,7 @@ def parse(prob : Problem):
         print("  exit, quit, q: Exit the program")
         print("  run, r [a,b,t,g]: Run your code")
         print("  make, m: Compile the source code")
+        print("  clean: Remove compiled files")
         print("  setl <lang>: Set the main language")
         print("  setf <filename>: Set the filename")
         print("  info: Display checker information")

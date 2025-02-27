@@ -47,6 +47,7 @@ Commands:
   exit, quit, q: Exit the program
   run, r [a,b,t,g]: Run your code
   make, m: Compile the source code
+  clean: Remove compiled files
   setl <lang>: Set the main language
   setf <filename>: Set the filename
   info: Display checker information
