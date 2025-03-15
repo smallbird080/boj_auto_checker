@@ -1,7 +1,9 @@
-import os, subprocess
+import os, subprocess, psutil
+import time
 import json
 import requests
 from .loader import get_testac_id, get_code
+from threading import Thread
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,43 +20,74 @@ def make(filename: str, lang: str) -> int | None:
         return 0
     
 
-def run_case(filename : str, num : int, testcase : str, ans : str, time : float, lang : str, debug : bool = False) -> bool:
+def run_case(filename : str, num : int, testcase : str, ans : str, timelimit : float, lang : str, debug : bool = False) -> bool:
+    class ThreadFlag:
+        def __init__(self):
+            self._flag = False
+        def set(self):
+            self._flag = True
+        def is_set(self):
+            return self._flag
+    
+    def monitor_memory(proc, result, stop_flag):
+        max_memory = 0
+        while not stop_flag.is_set():
+            try:
+                total_memory = proc.memory_info().rss
+                for child in proc.children(recursive=True):
+                    total_memory += child.memory_info().rss
+                max_memory = max(max_memory, total_memory)
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                break
+        result.append(max_memory)
+
+    success = False
     print(f"Running case {num}...")
     cmd = [os.path.join(current_dir, f"../../{filename}")]
     if lang.count("py"):
-        time = time * 3 + 2
+        timelimit = timelimit * 3 + 2
         cmd[0] += ".py"
         cmd = ["python3"] + cmd
     elif lang.count("java"):
-        time = time * 2 + 1
+        timelimit = timelimit * 2 + 1
         cmd[0] += ".java"
         cmd = ["java"] + cmd
+    process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    ps_process = psutil.Process(process.pid)
+
+    memory = []
+    stop_flag = ThreadFlag()
+    monitor_thread = Thread(target=monitor_memory, args=(ps_process, memory, stop_flag))
+    monitor_thread.start()
     try:
-        result = subprocess.run(
-            cmd,
-            input=testcase.encode('utf-8'),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=time
-        )
+        result = process.communicate(input=testcase, timeout=timelimit)
     except subprocess.TimeoutExpired:
+        process.kill()
+        stop_flag.set()
+        monitor_thread.join(0.1)
         print(f"case {num} testing stopped: timeout")
         print()
+        print(f"Memory Usage: {memory[0]/1024} KB")
+        print("--------------------------------------------------")
         return False
+    finally:
+        if monitor_thread.is_alive():
+            stop_flag.set()
+            monitor_thread.join(0.1)
     
-    output = result.stdout.decode('utf-8').strip()
-    error = result.stderr.decode('utf-8').strip()
+    output = result[0].strip()
+    error = result[1].strip()
     if error:
         print(error)
-    if result.returncode < 0:
+    if process.returncode < 0:
         print(output)
-        if result.returncode == -11:
+        if process.returncode == -11:
             print(f"case {num} testing stopped: segfault")
         else:
-            print(f"case {num} testing stopped: terminated by signal {abs(result.returncode)}")
-    elif result.returncode != 0:
+            print(f"case {num} testing stopped: terminated by signal {abs(process.returncode)}")
+    elif process.returncode != 0:
         print(output)
-        print(f"case {num} testing stopped: error code {result.returncode}")
+        print(f"case {num} testing stopped: error code {process.returncode}")
 
         if lang.count("fsan") > 0:
             print("Summary:", error.split("SUMMARY:")[1].split("\n")[0])
@@ -65,12 +98,13 @@ def run_case(filename : str, num : int, testcase : str, ans : str, time : float,
         print(f"Output for case {num}:\n{output}")
         if output == ans.strip():
             print(f"Correct!")
-            print("--------------------------------------------------")
-            return True
+            success = True
         else:
             print(f"Miss! Expected:\n{ans.strip()}")
+    print()        
+    print(f"Memory Usage: {memory[0]/1024} KB")
     print("--------------------------------------------------")
-    return False
+    return success
 
 def run_ac(prob_num : int, filename : str, lang : str ,avail : bool) -> bool:
     if (not avail):

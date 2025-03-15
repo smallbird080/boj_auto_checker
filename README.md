@@ -101,17 +101,23 @@ Output for case 1:
 4
 3
 Correct!
+
+Memory Usage: 8.0 KB
 --------------------------------------------------
 Running case 2...
 Output for case 2:
 -1
 Correct!
+
+Memory Usage: 8.0 KB
 --------------------------------------------------
 Running case 3...
 Output for case 3:
 3
 -1
 Correct!
+
+Memory Usage: 8.0 KB
 --------------------------------------------------
 Running testcase.ac ...
 
@@ -133,11 +139,15 @@ Output for case 1:
 Miss! Expected:
 4
 3
+
+Memory Usage: 8.0 KB
 --------------------------------------------------
 Running case 2...
 Output for case 2:
 -1
 Correct!
+
+Memory Usage: 8.0 KB
 --------------------------------------------------
 Running case 3...
 Output for case 3:
@@ -146,6 +156,8 @@ Output for case 3:
 Miss! Expected:
 3
 -1
+
+Memory Usage: 8.0 KB
 --------------------------------------------------
 
 BOJ Results:
@@ -206,6 +218,8 @@ WRITE of size 8 at 0x603000000058 thread T0
 
 case 1 testing stopped: error code 1
 Summary:  AddressSanitizer: heap-buffer-overflow ../boj.cpp:31 in main
+
+Memory Usage: 8.0 KB
 --------------------------------------------------
 Running case 2...
 
@@ -234,6 +248,8 @@ Makefile 수정을 통해 원하는 언어, 컴파일 옵션을 추가할 수 �
 command history 기능을 지원합니다.
 
 fsanitize=address 옵션을 사용할 수 있습니다. (C/C++). fsan 전체 결과와 함께 summary를 추출하여 보여줍니다.
+
+메모리 사용량은 채점 환경과 다를 수 있습니다. 참고용으로만 사용하기 바랍니다.
 
 ## TODO
 
