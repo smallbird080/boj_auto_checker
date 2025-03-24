@@ -173,6 +173,12 @@ def run_ac(prob_num : int, filename : str, lang : str ,avail : bool) -> bool:
                 for i, case in enumerate(exec_failed_cases):
                     print(f"Case {i+1}:")
                     print(f'Input:\n{case["testcase"]}')
+                    reason = case["reason"]
+                    if reason == "RTE":
+                        print("Reason: Runtime Error")
+                    elif reason == "TLE":
+                        print("Reason: Time Limit Exceeded")
+                    else:
+                        print("Reason: "+ reason)
                     print("--------------------------------------------------")
-                print(exec_failed_cases)
             return False
