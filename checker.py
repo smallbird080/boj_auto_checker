@@ -15,7 +15,7 @@ config["availableLanguages"] = available_lang
 
 def display_info(prob=0):
     print("BOJ Auto Checker")
-    print("Version 1.0")
+    print("Version 1.1.1")
     print()
     if prob:
         print("Current Problem Number:", prob)
