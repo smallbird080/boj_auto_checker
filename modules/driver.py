@@ -1,5 +1,4 @@
 import os, subprocess, psutil
-import time
 import json
 import requests
 from .loader import get_testac_id, get_code

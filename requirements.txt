@@ -1,0 +1,7 @@
+# requirements.txt
+# python version: 3.10.* or later
+
+# pip install -r requirements.txt
+beautifulsoup4
+psutil
+requests
