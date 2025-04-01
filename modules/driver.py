@@ -112,10 +112,15 @@ def run_ac(prob_num : int, filename : str, lang : str ,avail : bool) -> bool:
     print("Running testcase.ac ...")
     if lang.count("cpp"):
         lang = "cpp"
-    elif lang.count("c"):
-        lang = "c"
+    elif lang == "c-fsan":
+        lang = "c99"
     elif lang.count("py"):
-        lang = "py"
+        lang = "python3"
+    if lang not in ['cpp', 'python3', 'java', 'csharp', 'nodejs', 'pypy3', 'c99', 'c11']:
+        print(f"Language '{lang}' not supported")
+        print("Supported languages: cpp, python3, java, csharp, nodejs, pypy3, c99, c11")
+        print("Please check the language name in Makefile")
+        return None
     code = get_code(filename, lang)
     generator, answer = get_testac_id(prob_num)
     if lang.count("c"):
