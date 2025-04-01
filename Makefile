@@ -1,11 +1,11 @@
 CXXFLAGS = -O2 -Wall -lm
 
 c11:
-	gcc -o ../$(FILE) ../$(FILE).c $(CXXFLAGS) -static -std=gnu11
+	gcc -o ../$(FILE) ../$(FILE).c $(CXXFLAGS) -std=gnu11
 c99:
-	gcc -o ../$(FILE) ../$(FILE).c $(CXXFLAGS) -static -std=gnu99
+	gcc -o ../$(FILE) ../$(FILE).c $(CXXFLAGS) -std=gnu99
 cpp:
-	g++ -o ../$(FILE) ../$(FILE).cpp $(CXXFLAGS) -static -std=gnu++17
+	g++ -o ../$(FILE) ../$(FILE).cpp $(CXXFLAGS) -std=gnu++17
 c-fsan:
 	gcc -o ../$(FILE) ../$(FILE).c $(CXXFLAGS) -std=gnu99 -fsanitize=address -g
 cpp-fsan:
