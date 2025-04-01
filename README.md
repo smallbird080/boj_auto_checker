@@ -61,7 +61,7 @@ Commands:
 
 ```
 BOJ Auto Checker
-Version 1.1.1
+Version 1.1.2
 
 Current filename: boj
 Current main language: cpp
