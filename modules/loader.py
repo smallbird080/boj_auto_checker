@@ -78,6 +78,12 @@ def get_problem(prob_num: int) -> Problem:
         return None
 
 def get_code(filename : str, lang : str) -> str:
+    if lang.count("cpp"):
+        lang = "cpp"
+    elif lang.count("c"):
+        lang = "c"
+    elif lang.count("py"):
+        lang = "py"
     with open(os.path.join(current_dir, f"../../{filename}.{lang}"), 'r') as f:
         code = f.read()
     return code
