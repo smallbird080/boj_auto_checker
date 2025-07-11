@@ -123,6 +123,9 @@ def run_ac(prob_num : int, filename : str, lang : str ,avail : bool) -> bool:
         return None
     code = get_code(filename, lang)
     generator, answer = get_testac_id(prob_num)
+    if generator is None or answer is None:
+        print("Failed to get testcase.ac IDs")
+        return None
     if lang.count("c"):
         lang = "cpp"
     url = "https://testcase.ac/api/trpc/runner.stress?batch=1"

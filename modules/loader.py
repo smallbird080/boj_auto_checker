@@ -85,13 +85,21 @@ def get_code(filename : str, lang : str) -> str:
 def get_testac_id(prob_num: int) -> tuple[int,int]:
     url = "https://testcase.ac/problems/"+str(prob_num)
     res = requests.get(url, headers=headers)
-    soup = bs(res.text, 'html.parser')
-    try:
-        generator = int(soup.select_one("body > main > div > div.grid.grid-cols-1.gap-y-4.sm\:grid-cols-\[80px_1fr\].sm\:gap-x-2 > div:nth-child(2) > table > tbody > tr > td.p-4.align-middle.\[\&\:has\(\[role\=checkbox\]\)\]\:pr-0.px-1\.5.py-1\.5.font-medium.text-right").text)
-    except:
-        generator = int(soup.select_one("body > main > div > div.grid.grid-cols-1.gap-y-4.sm\:grid-cols-\[80px_1fr\].sm\:gap-x-2 > div:nth-child(2) > table > tbody > tr.border-b.data-\[state\=selected\]\:bg-muted.cursor-pointer.transition-colors.hover\:bg-muted\/50.bg-muted > td.p-4.align-middle.\[\&\:has\(\[role\=checkbox\]\)\]\:pr-0.px-1\.5.py-1\.5.font-medium.text-right").text)
-    try:
-        answer = int(soup.select_one("body > main > div > div.grid.grid-cols-1.gap-y-4.sm\:grid-cols-\[80px\,1fr\].sm\:gap-x-2 > div:nth-child(4) > table > tbody > tr > td.p-4.align-middle.\[\&\:has\(\[role\=checkbox\]\)\]\:pr-0.px-1\.5.py-1\.5.font-medium.text-right").text)
-    except:
-        answer = int(soup.select_one("body > main > div > div.grid.grid-cols-1.gap-y-4.sm\:grid-cols-\[80px_1fr\].sm\:gap-x-2 > div:nth-child(4) > table > tbody > tr.border-b.data-\[state\=selected\]\:bg-muted.cursor-pointer.transition-colors.hover\:bg-muted\/50.bg-muted > td.p-4.align-middle.\[\&\:has\(\[role\=checkbox\]\)\]\:pr-0.px-1\.5.py-1\.5.font-medium.text-right").text)
+
+    import re
+
+    generator_match = re.search(r'generatorCodes.*?id.*?(\d+)', res.text)
+    if generator_match:
+        generator = int(generator_match.group(1))
+    else:
+        print("Failed to find generator ID")
+        return None, None
+    
+    answer_match = re.search(r'correctCodes.*?id.*?(\d+)', res.text)
+    if answer_match:
+        answer = int(answer_match.group(1))
+    else:
+        print("Failed to find answer ID")
+        return None, None
+    
     return generator, answer
